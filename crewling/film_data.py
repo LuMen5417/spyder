@@ -38,10 +38,51 @@ def web_process(webpage):
     FilmInfo["name"] = film_name
 
     data = re.findall(r'<span class="year">\((.*?)\)</span>', webpage, re.S)
-    FilmInfo['date'] = int(data[0])
+    FilmInfo["date"] = int(data[0])
 
-    data = re.findall(r'<div id="info">(.*?)</div>', webpage, re.S)
+
+    data = re.findall(r'rel="v:directedBy">(.*?)</a>', webpage, re.S)
+    FilmInfo["directeBy"] = data
+
+    data = re.findall(r'''<span ><span class='pl'>编剧</span>: <span class='attrs'>(.*?)</span><br/>''', webpage, re.S)
+    data_array = re.findall(r'>(.*?)</a>', data[0], re.S)
+    FilmInfo["scriptwriter"] = data_array
+
+
+    data = re.findall(r'<span class="actor">(.*?)</span><br/>', webpage, re.S)
+    data_array = re.findall(r'">(.*?)</a>', data[0], re.S)
+    FilmInfo["actor"] = data_array
+
+    data = re.findall(r'<span class="pl">类型:(.*?)<br/>', webpage, re.S)
+    data_array = re.findall(r'">(.*?)</span>', data[0], re.S)
+    FilmInfo["type"] = data_array
+
+    data = re.findall(r'<span class="pl">制片国家/地区:(.*?)/>', webpage, re.S)
+    data_array = re.findall(r'>\s(.*?)<br', data[0], re.S)
+    FilmInfo["producer-country"] = data_array
+
+    data = re.findall(r'<span class="pl">语言:(.*?)/>', webpage, re.S)
+    data_array = re.findall(r'>\s(.*?)<br', data[0], re.S)
+    FilmInfo["laguage"] = data_array
+
+    data = re.findall(r'<span class="pl">上映日期:(.*?)/>', webpage, re.S)
+    data_array = re.findall(r'">(.*?)</span>', data[0], re.S)
+    FilmInfo["release-time"] = data_array
+
+    data = re.findall(r'<span class="pl">片长:(.*?)/>', webpage, re.S)
+    data_array = re.findall(r'">(.*?)</span>', data[0], re.S)
+    FilmInfo["film-length"] = data_array
+
+    data = re.findall(r'<span class="pl">又名:(.*?)/>', webpage, re.S)
     print(data)
+    data_array = re.findall(r'>\s(.*?)<br', data[0], re.S)
+    FilmInfo["alias"] = data_array
+
+    data = re.findall(r'<strong class="ll rating_num" property="v:average">(.*?)</strong>', webpage, re.S)
+    FilmInfo["Scores"] = float(data[0])
+
+    data = re.findall(r'<a href="collections" class="rating_people"><span property="v:votes">(.*?)</span>人评价</a>', webpage, re.S)
+    FilmInfo["rating_people"] = int(data[0])
 
     print("film info:", FilmInfo)
 
