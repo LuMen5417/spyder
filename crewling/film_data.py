@@ -2,7 +2,7 @@
 """
 Spyder Editor
 
-This is a temporary script file.
+This is spyder file.
 """
 
 
@@ -32,13 +32,16 @@ def web_process(webpage):
     film_id = data_array[9]
     FilmInfo["id"]=int(film_id)
 
-    print("The file id:", film_id)
-
     data = re.findall(r'<title>.*?</title>', webpage, re.S)
-    #data_array = re.split(r'\s', data[0])
     data_array = data[0].split()
     film_name = data_array[1]
     FilmInfo["name"] = film_name
+
+    data = re.findall(r'<span class="year">\((.*?)\)</span>', webpage, re.S)
+    FilmInfo['date'] = int(data[0])
+
+    data = re.findall(r'<div id="info">(.*?)</div>', webpage, re.S)
+    print(data)
 
     print("film info:", FilmInfo)
 
