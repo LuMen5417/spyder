@@ -84,6 +84,10 @@ def web_process(webpage):
     data = re.findall(r'<a href="collections" class="rating_people"><span property="v:votes">(.*?)</span>人评价</a>', webpage, re.S)
     FilmInfo["rating_people"] = int(data[0])
 
+    data = re.findall(r'<span class="rating_per">(.*?)</span>', webpage, re.S)
+    FilmInfo["rating_grate"] = data
+
+
     print("film info:", FilmInfo)
 
     return FilmInfo
