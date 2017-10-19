@@ -172,6 +172,7 @@ def main():
     with open('film.csv', 'w', encoding="utf-8") as csvfile:
         fieldnames = ['id', 'name', 'date', 'directeBy', 'scriptwriter', 'actor', 'type', 'producer-country', 'laguage',
                 'release-time', 'film-length', 'alias', 'Scores', 'rating_people', 'rating_per', 'rating_betterthan']
+
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         writer.writeheader()
@@ -179,11 +180,11 @@ def main():
         #url="https://movie.douban.com/subject/27038183/?from=showing"
 
         start_url = "https://movie.douban.com/subject/"
-        start_id = 27000000
-        #start_id = 27038183
+        #start_id = 27000000
+        start_id = 27038183
         id = start_id
 
-        for i in range(1000):
+        for i in range(1):
             id = start_id+i
             url = start_url + str(id)
 
