@@ -19,7 +19,7 @@ def crawling(url, user_agent='wswp', retries=2):
     try:
         html = urllib.request.urlopen(request).read()
     except urllib.error.URLError as e:
-        print("Downloading error reason:%s, code:%d" %(e.reason,e.code))
+        print("Downloading error reason:%s, code:%d\n" %(e.reason,e.code))
         html = None
         if retries > 0:
             if hasattr(e,'code') and 500 <= e.code < 600:
@@ -43,8 +43,8 @@ def web_process(webpage, target_id):
 
     data = re.findall(r'<title>.*?</title>', webpage, re.S)
     if data:
-        data_array = data[0].split()
-        film_name = data_array[1]
+        data_array = re.split(r'>\s(.*?)\s<', data[0])
+        film_name = data_array[1].strip()
         FilmInfo["name"] = film_name
     else:
         FilmInfo["name"] = None
@@ -148,7 +148,7 @@ def web_process(webpage, target_id):
         FilmInfo["Scores"] = None
 
     data = re.findall(r'<a href="collections" class="rating_people"><span property="v:votes">(.*?)</span>人评价</a>', webpage, re.S)
-    if data[0]:
+    if data and data[0]:
         FilmInfo["rating_people"] = int(data[0])
     else:
         FilmInfo["rating_people"] = None
@@ -169,7 +169,7 @@ def web_process(webpage, target_id):
 
 def main():
 
-    with open('film.csv', 'w') as csvfile:
+    with open('film.csv', 'w', encoding="utf-8") as csvfile:
         fieldnames = ['id', 'name', 'date', 'directeBy', 'scriptwriter', 'actor', 'type', 'producer-country', 'laguage',
                 'release-time', 'film-length', 'alias', 'Scores', 'rating_people', 'rating_per', 'rating_betterthan']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
@@ -179,26 +179,25 @@ def main():
         #url="https://movie.douban.com/subject/27038183/?from=showing"
 
         start_url = "https://movie.douban.com/subject/"
-        start_id = 26000000
-        #start_id = 27038209
+        start_id = 27000000
+        #start_id = 27038183
         id = start_id
 
-        for i in range(100000):
+        for i in range(1000):
             id = start_id+i
             url = start_url + str(id)
 
-            print("The url:", url)
             html = crawling(url)
             if html is None:
                 continue
 
-            webpage = html.decode("utf-8")
+            webpage = html.decode("utf-8");
             #print(html)
 
             #print(type(html))
             #print(type(webpage))
             #print(webpage)
-            #f = open("movie.html","w", encoding='utf-8')
+            #f = open("movie.html","w", encoding='')
             #f.write(str(webpage))
             #f.close()
 
@@ -206,7 +205,7 @@ def main():
 
             writer.writerow(data)
 
-    with open('film.csv', 'r') as rcsvfile:
+    with open('film.csv', 'r', encoding='utf-8') as rcsvfile:
         reader = csv.DictReader(rcsvfile)
         for row in reader:
             #print("The row data:", row)
